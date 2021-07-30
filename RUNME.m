@@ -37,9 +37,9 @@ source = [0   0   0   1;  % positive current electrode
 Edge2Edge = formEdge2EdgeMatrix(edges,lengths);
 Face2Edge = formFace2EdgeMatrix(edges,lengths,faces,areas);
 Cell2Edge = formCell2EdgeMatrix(edges,lengths,faces,cells,volumes);
-ce = 1 * Edge2Edge * edgeCon; % conductance from edges
-cf = 2 * Face2Edge * faceCon; % conductance from faces
-cc = 3 * Cell2Edge * cellCon; % conductance from cells
+ce = Edge2Edge * edgeCon; % conductance from edges
+cf = Face2Edge * faceCon; % conductance from faces
+cc = Cell2Edge * cellCon; % conductance from cells
 c = ce + cf + cc; % total conductance 
 
 % Source vector (injected current at each node)
