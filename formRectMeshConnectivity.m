@@ -1,34 +1,37 @@
-% Form lists of nodes, edges, lengths, faces, areas, cells, volumes for a
-% given rectilinear mesh
+function [nodes, edges, lengths, faces, areas, cells, volumes] = ...
+                                formRectMeshConnectivity(nodeX,nodeY,nodeZ)
+% A function in the package "RESnet-m" 
+% Form the connectivity information for a given rectilinear mesh
+% 
 % function [nodes, edges, lengths, faces, areas, cells, volumes] = ...
-%    formRectMeshConnectivity(nodeX,nodeY,nodeZ)
+%                               formRectMeshConnectivity(nodeX,nodeY,nodeZ)
 % INPUT
-%     nodeX,nodeY,nodeZ: nodes' location in X, Y, Z of a rectilinear mesh
+%     nodeX,nodeY,nodeZ: node locations in X, Y, Z of a rectilinear mesh
 % OUTPUT
 %     nodes: a 3-column matrix of X-Y-Z locations for the nodes (grid conjunction)
-%     edges: a 2-column matrix of node index for the edges; 1st column for
-%     starting node and 2nd column for ending node
+%     edges: a 2-column matrix of node index for the edges; the 1st column for
+%         the starting nodes and the 2nd column for ending nodes
 %     lengths: a vector of the edges' lengths in meter
 %     faces: a 4-column matrix of edge index for the faces
 %     areas: a vector of the faces' area in square meter
 %     cells: a 6-column matrix of face index for the cells
 %     volumes: a vector of the cells' volume in cubic meter
 % NOTE
-% first level ordering: for directional objects (edge and face's normal), follow x,y,z orientation
-% second level ordering: for non-directional objects (cell) and within a
-% particular orientation, count in -z,+x,+y order (like UBCGIF meshtools model) 
-function [nodes, edges, lengths, faces, areas, cells, volumes] = ...
-                                formRectMeshConnectivity(nodeX,nodeY,nodeZ)
+%     First level ordering: for directional objects (edge and face's normal), 
+%         follow x, y, z-orientation ordering
+%     Second level ordering: for non-directional objects (cell) and within
+%         a particular orientation, count in z (top to bottom), then x 
+%         (left to right), then y (front to back)
 
-% create nodes lists 
-% # of nodes
+% Create nodes lists 
+% number of nodes
 Nx = length(nodeX);
 Ny = length(nodeY);
 Nz = length(nodeZ);
 [a, b, c] = meshgrid(nodeX,nodeZ,nodeY);
 nodes = [a(:) c(:) b(:)]; % X-Y-Z location (note ordering)
 
-% create edges list (index to nodes)
+% Create edges list (index to nodes)
 % x-direction edges
 [a, b, c] = meshgrid(1:Nx-1,1:Nz,1:Ny);
 xcell = a(:);
@@ -50,15 +53,15 @@ ynode = c(:);
 zcell = b(:);
 z1 = (Nx*Nz)*(ynode-1) + Nz*(xnode-1) + zcell;
 z2 = z1 + 1;
-% assembly in order of x-, y-, z-oriented edges
+% Assemble in order of x-, y-, z-oriented edges
 n1 = [x1; y1; z1]; % 1st node of each edge
 n2 = [x2; y2; z2]; % 2nd node of each edge
 edges = [n1 n2];
 
-% create lengths list (in meter)
+% Create lengths list (in meter)
 lengths = sqrt( sum( ( nodes(edges(:,1),:) - nodes(edges(:,2),:) ).^2 , 2) );
 
-% create faces list (index to edges)
+% Create faces list (index to edges)
 NedgesX = (Nx-1) * Ny * Nz;
 NedgesY = Nx * (Ny-1) * Nz;
 NedgesZ = Nx * Ny * (Nz-1);
@@ -89,16 +92,16 @@ tmp = reshape(1:NedgesY,Nz,Nx,Ny-1);
 tmp(:,Nx,:) = [];
 zfye1 = reshape(tmp,[],1) + NedgesX;
 zfye2 = zfye1 + Nz;
-% assembly: four edges per face, faces in x,y,z orientation
+% Assemble: four edges per face, faces in x,y,z orientation
 faces = [xfye1 xfye2 xfze1 xfze2;
          yfxe1 yfxe2 yfze1 yfze2;
          zfxe1 zfxe2 zfye1 zfye2];
      
-% create areas list (in meter squared)
+% Create areas list (in meter squared)
 areas = lengths(faces(:,1)) .* lengths(faces(:,3)); % the 1st and 3rd edges are perpendicular
      
      
-% create cells list (index to faces)
+% Create cells list (index to faces)
 NfacesX = Nx * (Ny-1) * (Nz-1);
 NfacesY = (Nx-1) * Ny * (Nz-1);
 NfacesZ = (Nx-1) * (Ny-1) * Nz;
@@ -120,11 +123,8 @@ zf2 = zf1 + 1;
 % assembly: six faces per cell
 cells = [xf1 xf2 yf1 yf2 zf1 zf2];
 
-% create volumes list (in meter cubed)
+% Create volumes list (in meter cubed)
 volumes = sqrt( areas(cells(:,1)) .* areas(cells(:,3)) .* areas(cells(:,5)) ); % the 1st, 3rd and 5th faces are perpendicular
-
-
-
 
 
 end
