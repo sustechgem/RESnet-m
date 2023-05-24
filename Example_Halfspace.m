@@ -1,7 +1,10 @@
-% An example for testing the solution of half-space
+% Testing the solution of half-space
 % Dikun Yang, yangdikun@gmail.com, 2015 - 2023.
 
-%% Setup the geo-electrical model
+% In the following, a pole-dipole array is simulated for a uniform
+% half-space and compared against the analytic solution.
+
+%% Setup the 3D mesh
 
 % Create a 3D rectilinear mesh
 h = 2;
@@ -11,21 +14,20 @@ nodeX = round([ -cumsum(h*ratio.^(nctbc:-1:0)','reverse'); 0; cumsum(h*ratio.^(0
 nodeY = round([ -cumsum(h*ratio.^(nctbc:-1:0)','reverse'); 0; cumsum(h*ratio.^(0:nctbc)')]); % node locations in Y
 nodeZ = round([0; -cumsum(h*ratio.^(0:nctbc)')]); % node locations in Z
 
+%% Setup the geo-electrical model
+
 % Define the model using combination of blocks
-% A model includes some blocks that can represent objects like sheets or lines when one or two dimensions vanish.
 blkLoc = [ -inf  inf  -inf  inf    0 -inf];  % a uniform half-space
+blkCon = [ 1e-2]; % conductive property of a volumetric object (S/m)
 
-blkCon = [ 1e-2]; % conductive property of the volumetric object (S/m)
-
-%% Setup the electric surveys
+%% Setup the electric surveys (pole-dipole)
 
 % Define the current sources in the format of [x y z current(Ampere)]
-tx = {[    0    0    0    1;   % first set of source (two electrodes)
-        -inf    0    0   -1]};
-
+tx = {[    0    0    0    1;   % A electrode
+        -inf    0    0   -1]}; % B electrode
 
 % Define the receiver electrodes in the format of [Mx My Mz Nx Ny Nz]
-rx = {[   10    0    0   20    0    0;  % first set of receivers (yielding three data values)
+rx = {[   10    0    0   20    0    0;  % nine M-N pairs for the source
           20    0    0   30    0    0;
           30    0    0   40    0    0;
           40    0    0   50    0    0;
@@ -54,7 +56,6 @@ Cf = Face2Edge * faceCon; % conductance from faces
 Cc = Cell2Edge * cellCon; % conductance from cells
 C = Ce + Cf + Cc; % total conductance 
 
-
 %% Solve the resistor network problem
 
 % Calculate current sources on the nodes using info in tx
@@ -78,21 +79,30 @@ for i = 1:Ntx
     data{i} = (Mw' - Nw') * potentials(:,i); % calculate the potential difference data as "M - N"
 end
 
-%% Analytic solutions
+%% Compare against analytic solutions
 
-rAM = rx{1}(:,1) - 0;
-rAN = rx{1}(:,4) - 0;
-rho = 100;
+Aloc = [0, 0, 0]; % location of A electrode
+rAM = rx{1}(:,1) - Aloc(1); % A-M distance
+rAN = rx{1}(:,4) - Aloc(1); % A-N distance
+rho = 100; % half-space resistivity
 I = 1;
-dV = rho * I / 2 / pi * (1./rAM - 1./rAN);
-X = 0.5 * (rx{1}(:,1) + rx{1}(:,4));
+dV = rho * I / 2 / pi * (1./rAM - 1./rAN); % potential differences (analytic solution)
+X = 0.5 * (rx{1}(:,1) + rx{1}(:,4)); % centers of M-N (x-coordinate)
 
 figure;
 subplot(2,1,1);
 semilogy(X,data{1},'.-');
 hold on;
 plot(X,dV,'.-');
+legend({'RESnet','Analytic'});
+grid on;
+xlabel('Tx-Rx offset (m)');
+ylabel('Potential difference (V)');
+title('(a) Numerical and analytic solutions');
+
 subplot(2,1,2);
-plot(X,(data{1}-dV)./dV,'.-');
-
-
+plot(X,(data{1}-dV)./dV,'k.-');
+grid on;
+xlabel('Tx-Rx offset (m)');
+ylabel('Relative error');
+title('(b) Numerical errors');
