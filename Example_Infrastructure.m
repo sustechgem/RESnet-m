@@ -109,14 +109,14 @@ x = sum(ABMNKVR1(:,1:4),2)/4; % mid-point of four electrodes
 n = (ABMNKVR1(:,3) - ABMNKVR1(:,2))/spacing; % n-spacing as pseudo-depth
 
 figure;
-scatter(x,n,500,log10(ABMNKVR1(:,7)),'square','filled');
+scatter(x,n,200,log10(ABMNKVR1(:,7)),'square','filled');
 set(gca,'ydir','reverse');
 grid on;
 hc = colorbar;
 hc.Label.String = 'Apparent resistivity log(Ohm*m)';
 xlabel('X (m)');
 ylabel('n-spacing');
-title('(1) Model #1: Half-space');
+title('(a) Model #1: Half-space');
 
 
 %% Define Model #2: Two blocks in half-space
@@ -195,14 +195,14 @@ x = sum(ABMNKVR2(:,1:4),2)/4; % mid-point of four electrodes
 n = (ABMNKVR2(:,3) - ABMNKVR2(:,2))/spacing; % n-spacing as pseudo-depth
 
 figure;
-scatter(x,n,500,log10(ABMNKVR2(:,7)),'square','filled');
+scatter(x,n,200,log10(ABMNKVR2(:,7)),'square','filled');
 set(gca,'ydir','reverse');
 grid on;
 hc = colorbar;
 hc.Label.String = 'Apparent resistivity log(Ohm*m)';
 xlabel('X (m)');
 ylabel('n-spacing');
-title('(2) Model #2: Two blocks');
+title('(b) Model #2: Two blocks');
 
 %% Define Model #3: Infrastructure
 
@@ -293,14 +293,14 @@ x = sum(ABMNKVR3(:,1:4),2)/4; % mid-point of four electrodes
 n = (ABMNKVR3(:,3) - ABMNKVR3(:,2))/spacing; % n-spacing as pseudo-depth
 
 figure;
-scatter(x,n,500,log10(ABMNKVR3(:,7)),'square','filled');
+scatter(x,n,200,log10(ABMNKVR3(:,7)),'square','filled');
 set(gca,'ydir','reverse');
 grid on;
 hc = colorbar;
 hc.Label.String = 'Apparent resistivity log(Ohm*m)';
 xlabel('X (m)');
 ylabel('n-spacing');
-title('(3) Model #3: Infrastructure');
+title('(c) Model #3: Infrastructure');
 
 
 %% Define Model #4: Above-ground pipe
@@ -401,14 +401,14 @@ x = sum(ABMNKVR4(:,1:4),2)/4; % mid-point of four electrodes
 n = (ABMNKVR4(:,3) - ABMNKVR4(:,2))/spacing; % n-spacing as pseudo-depth
 
 figure;
-scatter(x,n,500,log10(ABMNKVR4(:,7)),'square','filled');
+scatter(x,n,200,log10(ABMNKVR4(:,7)),'square','filled');
 set(gca,'ydir','reverse');
 grid on;
 hc = colorbar;
 hc.Label.String = 'Apparent resistivity log(Ohm*m)';
 xlabel('X (m)');
 ylabel('n-spacing');
-title('(4) Model #4: Above-ground pipe');
+title('(d) Model #4: Above-ground pipe');
 
 
 
