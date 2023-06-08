@@ -44,8 +44,8 @@ tx = {[    0    0    0    1;   % first set of source (two electrodes)
 % Define the receiver electrodes in the format of [Mx My Mz Nx Ny Nz]
 spacing = 20; % M-N distance
 datagridx = -1250:spacing:1250; % data grid in X
-Ndatagridx = length(datagridx); % nbumber of data grid in X
-datagridy = -1250:spacing:1250; % data grid in X
+Ndatagridx = length(datagridx); % number of data grid in X
+datagridy = -1250:spacing:1250; % data grid in Y
 Ndatagridy = length(datagridy); % number of data grid in Y
 N = Ndatagridx * Ndatagridy; % total number of receivers
 [datax, datay] = meshgrid(datagridx,datagridy);
