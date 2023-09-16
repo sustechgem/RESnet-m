@@ -8,11 +8,11 @@
 
 % Create a 3D rectilinear mesh
 h = 2;
-ratio = 1.14;
-nctbc = 30;
-nodeX = round([ -cumsum(h*ratio.^(nctbc:-1:0)','reverse'); 0; cumsum(h*ratio.^(0:nctbc)')]); % node locations in X
-nodeY = round([ -cumsum(h*ratio.^(nctbc:-1:0)','reverse'); 0; cumsum(h*ratio.^(0:nctbc)')]); % node locations in Y
-nodeZ = round([0; -cumsum(h*ratio.^(0:nctbc)')]); % node locations in Z
+ratio = 1.4;
+nctbc = 19;
+nodeX = round([ -cumsum(h*ratio.^(nctbc:-1:0)','reverse')-4; (-4:h:104)'; 104+cumsum(h*ratio.^(0:nctbc)')]); % node locations in X
+nodeY = round([ -cumsum(h*ratio.^(nctbc:-1:0)','reverse')-4; (-4:h:4)'; 4+cumsum(h*ratio.^(0:nctbc)')]); % node locations in Y
+nodeZ = round([(0:-h:-4)'; -4-cumsum(h*ratio.^(0:nctbc)')]); % node locations in Z
 
 %% Setup the geo-electrical model
 
