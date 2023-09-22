@@ -29,8 +29,8 @@ Ntx = length(Aloc); % number of source combos
 tx = cell(Ntx,1);
 rx = cell(Ntx,1);
 for i = 1:Ntx
-    tx{i} = [Aloc(i)         0 0  1;  % A electrode
-             Aloc(i)+spacing 0 0 -1]; % B electrode
+    tx{i} = [Aloc(i)+spacing  0 0  1;  % A electrode
+             Aloc(i)          0 0 -1]; % B electrode
     Mloc = ((Aloc(i)+spacing*2):spacing:36)'; % M electrodes
     Nloc = ((Aloc(i)+spacing*3):spacing:40)'; % N electrodes
     rx{i} = [Mloc Mloc*0 Mloc*0 Nloc Nloc*0 Nloc*0]; % Mx My(=0) Mz(=0) Nx Ny(=0) Nz(=0)
