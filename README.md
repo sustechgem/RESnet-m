@@ -1,5 +1,7 @@
 # RESnet-m
-3D resistor network solution for d.c. forward simulation problems. Matlab implementation.
+Dikun Yang (yangdikun@gmail.com)
+
+**3D resistor network solution for d.c. forward simulation problems. Matlab implementation.**
 
 A Python version is also available at：
 
@@ -14,3 +16,9 @@ Run the following scripts:
 - Example_Casing.m: Simulation of the surface electric field with the presence of steel well casing
 
 - Example_Infrastructure.m: Effect of complex metallic infrastructure on the surface dc resistivity data
+
+Software environment:
+
+- Tested with MATLAB R2020b and R2022a
+
+- Should be compatible with recent MATLAB releases
